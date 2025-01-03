@@ -10,10 +10,12 @@ def main():
         # Add your RAG model processing code here
         
         question = st.text_input("Ask a question about the file")
-        if question:
-            # Add your RAG model question-answering code here
-            answer = "This is where the answer will be displayed."
-            st.write(answer)
+        
+        if st.button("Submit Question", type="primary")
+            if question:
+                # Add your RAG model question-answering code here
+                answer = "This is where the answer will be displayed."
+                st.write(answer)
 
 if __name__ == "__main__":
     main()
