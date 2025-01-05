@@ -1,4 +1,5 @@
 streamlit
+streamlit_pdf_viewer
 langchain_experimental
 llama-index
 sentence-transformers
