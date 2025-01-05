@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_pdf_viewer import pdf_viewer
 
 def main():
     st.title("File Upload and Q&A App")
@@ -8,6 +9,8 @@ def main():
         # Process the uploaded file
         st.write("File uploaded successfully!")
         # Add your RAG model processing code here
+        binary_data = uploaded_file.getvalue()
+        pdf_viewer(input=binary_data, width=700)
         
         question = st.text_input("Ask a question about the file")
         
