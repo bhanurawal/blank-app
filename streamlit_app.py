@@ -7,8 +7,7 @@ import PyPDF2
 def read_pdf_pypdf2(file):
     reader = PyPDF2.PdfReader(file)
     text = ""
-    for page_num in range(reader.numPages):
-        page = reader.getPage(page_num)
+    for page in reader.pages:
         text += page.extract_text()
     return text
   
