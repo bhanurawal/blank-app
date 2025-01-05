@@ -3,6 +3,9 @@ from streamlit_pdf_viewer import pdf_viewer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 import PyPDF2
+from sentence_transformers import SentenceTransformer, util
+import torch
+
 
 def read_pdf_pypdf2(file):
     reader = PyPDF2.PdfReader(file)
@@ -35,6 +38,16 @@ def split_text(textPdf):
 
   return chunks # Return the list of split text chunks
 
+def generate_embedd(chunks):
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    ## df = pd.DataFrame(columns=['text', 'embedding'])
+    
+    # Generate embeddings for the data
+    embeddings = model.encode(chunks, convert_to_tensor=True)
+    ## df = pd.concat([df, pd.DataFrame({'text': [text], 'embedding': [embedding]})], ignore_index=True)
+
+    return embeddings
+
 def main():
     st.title("File Upload and Q&A App")
     
@@ -52,8 +65,23 @@ def main():
         if st.button("Submit Question", type="primary"):
             if question:
                 # Add your RAG model question-answering code here
-                answer = "This is where the answer will be displayed."
-                st.write(chunks[0])
+                #Create embedding for pdf
+                embeddings = generate_embedd(chunks)
+                
+                # Query Embeddings
+                query_embedding = model.encode(question, convert_to_tensor=True)
+                
+                # Compute cosine similarities
+                cosine_scores = util.pytorch_cos_sim(query_embedding, embeddings)[0]
+                
+                # Find the top 3 most similar sentences
+                top_results = torch.topk(cosine_scores, k=3)
+                
+                # Print results
+                ### answer = "This is where the answer will be displayed."
+                for score, idx in zip(top_results[0], top_results[1]):
+                    #print(f"Score: {score.item():.4f}\nText: {data[idx]}\n")
+                    st.write(f"Score: {score.item():.4f}\nText: {data[idx]}\n")
 
 if __name__ == "__main__":
     main()
