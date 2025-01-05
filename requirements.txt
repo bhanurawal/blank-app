@@ -1,1 +1,5 @@
 streamlit
+langchain_experimental
+llama-index
+sentence-transformers
+langchain-community
