@@ -42,7 +42,7 @@ def main():
         # Add your RAG model processing code here
         binary_data = uploaded_file.getvalue()
         # pdf_viewer(input=binary_data, width=700)
-        chunks = split_text(binary_data)
+        chunks = split_text(uploaded_file)
         
         question = st.text_input("Ask a question about the file")
         
