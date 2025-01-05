@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
 
 def split_text(documents: list[Document]):
   """
