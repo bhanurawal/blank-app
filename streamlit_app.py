@@ -2,8 +2,17 @@ import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
+import PyPDF2
 
-def split_text(documents: list[Document]):
+def read_pdf_pypdf2(file):
+    reader = PyPDF2.PdfFileReader(file)
+    text = ""
+    for page_num in range(reader.numPages):
+        page = reader.getPage(page_num)
+        text += page.extract_text()
+    return text
+  
+def split_text(textPdf):
   """
   Split the text content of the given list of Document objects into smaller chunks.
   Args:
@@ -22,13 +31,8 @@ def split_text(documents: list[Document]):
   #  text_splitter = SemanticChunker(lc_embed_model)
 
   # Split documents into smaller chunks using text splitter
-  chunks = text_splitter.split_documents(documents)
-  print(f"Split {len(documents)} documents into {len(chunks)} chunks.")
-
-  # Print example of page content and metadata for a chunk
-  document = chunks[0]
-  print(document.page_content)
-  print(document.metadata)
+  chunks = text_splitter.split_text(textPdf)
+  print(f"Split documents into {len(chunks)} chunks.")
 
   return chunks # Return the list of split text chunks
 
@@ -41,8 +45,8 @@ def main():
         st.write("File uploaded successfully!")
         # Add your RAG model processing code here
         binary_data = uploaded_file.getvalue()
-        # pdf_viewer(input=binary_data, width=700)
-        chunks = split_text(uploaded_file)
+        #### pdf_viewer(input=binary_data, width=700)
+        chunks = split_text(read_pdf_pypdf2(uploaded_file))
         
         question = st.text_input("Ask a question about the file")
         
@@ -50,7 +54,7 @@ def main():
             if question:
                 # Add your RAG model question-answering code here
                 answer = "This is where the answer will be displayed."
-                st.write(answer)
+                st.write(chunks[0])
 
 if __name__ == "__main__":
     main()
