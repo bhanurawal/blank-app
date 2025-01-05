@@ -5,7 +5,7 @@ from langchain.schema import Document
 import PyPDF2
 from sentence_transformers import SentenceTransformer, util
 import torch
-
+import os
 
 def read_pdf_pypdf2(file):
     reader = PyPDF2.PdfReader(file)
@@ -49,6 +49,9 @@ def generate_embedd(chunks):
     return embeddings,model
 
 def main():
+
+    os.environ["api_key"] == st.secrets["API_KEY"]
+    
     st.title("File Upload and Q&A App")
     
     uploaded_file = st.file_uploader("Choose a file")
