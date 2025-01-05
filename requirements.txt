@@ -5,3 +5,4 @@ llama-index
 sentence-transformers
 langchain-community
 PyPDF2
+txtai
