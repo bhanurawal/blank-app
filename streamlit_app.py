@@ -81,7 +81,7 @@ def main():
                 ### answer = "This is where the answer will be displayed."
                 for score, idx in zip(top_results[0], top_results[1]):
                     #print(f"Score: {score.item():.4f}\nText: {data[idx]}\n")
-                    st.write(f"Score: {score.item():.4f}\nText: {data[idx]}\n")
+                    st.write(f"Score: {score.item():.4f}\nText: {chunks[idx]}\n")
 
 if __name__ == "__main__":
     main()
