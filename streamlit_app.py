@@ -46,7 +46,7 @@ def generate_embedd(chunks):
     embeddings = model.encode(chunks, convert_to_tensor=True)
     ## df = pd.concat([df, pd.DataFrame({'text': [text], 'embedding': [embedding]})], ignore_index=True)
 
-    return embeddings
+    return embeddings,model
 
 def main():
     st.title("File Upload and Q&A App")
@@ -66,7 +66,7 @@ def main():
             if question:
                 # Add your RAG model question-answering code here
                 #Create embedding for pdf
-                embeddings = generate_embedd(chunks)
+                embeddings , model = generate_embedd(chunks)
                 
                 # Query Embeddings
                 query_embedding = model.encode(question, convert_to_tensor=True)
