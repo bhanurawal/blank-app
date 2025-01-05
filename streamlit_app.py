@@ -5,7 +5,7 @@ from langchain.schema import Document
 import PyPDF2
 
 def read_pdf_pypdf2(file):
-    reader = PyPDF2.PdfFileReader(file)
+    reader = PyPDF2.PdfReader(file)
     text = ""
     for page_num in range(reader.numPages):
         page = reader.getPage(page_num)
