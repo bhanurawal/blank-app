@@ -14,7 +14,7 @@ def main():
         
         question = st.text_input("Ask a question about the file")
         
-        if st.button("Submit Question", type="primary")
+        if st.button("Submit Question", type="primary"):
             if question:
                 # Add your RAG model question-answering code here
                 answer = "This is where the answer will be displayed."
