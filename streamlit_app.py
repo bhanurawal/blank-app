@@ -50,7 +50,7 @@ def generate_embedd(chunks):
 
 def main():
 
-    os.environ["api_key"] == st.secrets["API_KEY"]
+    ####os.environ["api_key"] == st.secrets["API_KEY"]
     
     st.title("File Upload and Q&A App")
     
