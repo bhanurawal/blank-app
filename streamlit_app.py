@@ -13,7 +13,20 @@ def read_pdf_pypdf2(file):
     for page in reader.pages:
         text += page.extract_text()
     return text
-  
+
+def Initialize_Chunking_function(embed_model_par):
+  from llama_index.core.node_parser import (
+      SentenceSplitter,
+      SemanticSplitterNodeParser,
+  )
+  splitter = SemanticSplitterNodeParser(
+      buffer_size=1, breakpoint_percentile_threshold=95, embed_model=embed_model_par
+  )
+  # also baseline splitter
+  base_splitter = SentenceSplitter(chunk_size=512)
+
+  return splitter, base_splitter # Return the initialized objects
+    
 def split_text(textPdf):
   """
   Split the text content of the given list of Document objects into smaller chunks.
@@ -37,7 +50,7 @@ def split_text(textPdf):
   print(f"Split documents into {len(chunks)} chunks.")
 
   return chunks # Return the list of split text chunks
-
+    
 def generate_embedd(chunks):
     model = SentenceTransformer('all-MiniLM-L6-v2')
     ## df = pd.DataFrame(columns=['text', 'embedding'])
@@ -71,20 +84,24 @@ def main():
                 #Create embedding for pdf
                 embeddings , model = generate_embedd(chunks)
                 
+                splitter, base_splitter = Initialize_Chunking_function(model)
+                nodes = splitter.get_nodes_from_documents(binary_data)
+                st.write(nodes[1].get_content())
+                
                 # Query Embeddings
-                query_embedding = model.encode(question, convert_to_tensor=True)
+                #query_embedding = model.encode(question, convert_to_tensor=True)
                 
                 # Compute cosine similarities
-                cosine_scores = util.pytorch_cos_sim(query_embedding, embeddings)[0]
+                #cosine_scores = util.pytorch_cos_sim(query_embedding, embeddings)[0]
                 
                 # Find the top 3 most similar sentences
-                top_results = torch.topk(cosine_scores, k=3)
+                #top_results = torch.topk(cosine_scores, k=3)
                 
                 # Print results
                 ### answer = "This is where the answer will be displayed."
-                for score, idx in zip(top_results[0], top_results[1]):
+                #for score, idx in zip(top_results[0], top_results[1]):
                     #print(f"Score: {score.item():.4f}\nText: {data[idx]}\n")
-                    st.write(f"Score: {score.item():.4f}\nText: {chunks[idx]}\n")
+                    #st.write(f"Score: {score.item():.4f}\nText: {chunks[idx]}\n")
 
 if __name__ == "__main__":
     main()
