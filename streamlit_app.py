@@ -75,7 +75,8 @@ def main():
         binary_data = uploaded_file.getvalue()
         #### pdf_viewer(input=binary_data, width=700)
         chunks = split_text(read_pdf_pypdf2(uploaded_file))
-        
+        st.write(chunks)
+            
         question = st.text_input("Ask a question about the file")
         
         if st.button("Submit Question", type="primary"):
