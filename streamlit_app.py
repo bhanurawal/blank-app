@@ -83,7 +83,7 @@ def main():
                 # Add your RAG model question-answering code here
                 #Create embedding for pdf
                 embeddings , model = generate_embedd(chunks)
-                st.write(embedings)
+                st.write(embeddings)
                 
                 splitter, base_splitter = Initialize_Chunking_function(model)
                 nodes = splitter.get_nodes_from_documents(binary_data)
