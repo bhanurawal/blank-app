@@ -75,7 +75,6 @@ def main():
         binary_data = uploaded_file.getvalue()
         #### pdf_viewer(input=binary_data, width=700)
         chunks = split_text(read_pdf_pypdf2(uploaded_file))
-        st.write(chunks)
             
         question = st.text_input("Ask a question about the file")
         
@@ -84,6 +83,7 @@ def main():
                 # Add your RAG model question-answering code here
                 #Create embedding for pdf
                 embeddings , model = generate_embedd(chunks)
+                st.write(embedings)
                 
                 splitter, base_splitter = Initialize_Chunking_function(model)
                 nodes = splitter.get_nodes_from_documents(binary_data)
