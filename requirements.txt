@@ -6,3 +6,4 @@ sentence-transformers
 langchain-community
 PyPDF2
 torch
+google-generativeai
