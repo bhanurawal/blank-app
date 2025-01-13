@@ -1,16 +1,18 @@
 import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import Document
 import PyPDF2
-from langchain_community.document_loaders import PyPDFLoader
 import uuid
-import faiss
-from sentence_transformers import SentenceTransformer, util
-from langchain_openai import OpenAIEmbeddings
-from langchain_openai import ChatOpenAI
 import torch
 import os
+from sentence_transformers import SentenceTransformer, util
+
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
+
 
 OPENAI_API_KEY = os.getenv("API_KEY")
 
