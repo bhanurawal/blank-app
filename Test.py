@@ -1,3 +1,5 @@
+###https://github.com/pkycode/RAGAPP/blob/main/RAG_PDF_App.py
+
 from concurrent.futures import ProcessPoolExecutor
 from sentence_transformers import SentenceTransformer
 
