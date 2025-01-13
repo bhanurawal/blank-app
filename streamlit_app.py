@@ -18,7 +18,7 @@ def read_pdf_pypdf2(file):
 
 class RAGPDFParser:
     def __init__(self):
-        self.embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+        self.embeddings = OpenAIEmbeddings()
         self.llm = ChatOpenAI(model_name="gpt-4", temperature=0,api_key=OPENAI_API_KEY)
         self.vector_store = None
         self.persist_directory = "vector_store"
