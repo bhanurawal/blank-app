@@ -109,28 +109,29 @@ def main():
     
     st.title("File Upload and Q&A App")
     
-    uploaded_file = st.file_uploader("Choose a file")
-    if uploaded_file is not None:
-        # Process the uploaded file
-        st.write("File uploaded successfully!")
-        # Add your RAG model processing code here
-        binary_data = uploaded_file.getvalue()
-        #### pdf_viewer(input=binary_data, width=700)
-        chunks = split_text(read_pdf_pypdf2(uploaded_file))
+    # uploaded_file = st.file_uploader("Choose a file")
+    # if uploaded_file is not None:
+    #     # Process the uploaded file
+    #     st.write("File uploaded successfully!")
+    #     # Add your RAG model processing code here
+    #     binary_data = uploaded_file.getvalue()
+    #     #### pdf_viewer(input=binary_data, width=700)
+    #     chunks = split_text(read_pdf_pypdf2(uploaded_file))
             
-        question = st.text_input("Ask a question about the file")
-        # Initialize RAG application in session state
-        if 'rag_app' not in st.session_state:
-            st.session_state.rag_app = RAGPDFParser()
-            
-         # # File upload
-        pdf_file = st.file_uploader("Upload your PDF", type=['pdf'])
-        if pdf_file:
-            if st.button("Process PDF"):
-                with st.spinner("Processing PDF..."):
-                    num_chunks = st.session_state.rag_app.process_pdf(pdf_file)
-                    if num_chunks > 0:
-                        st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
+    # question = st.text_input("Ask a question about the file")
+    
+    # Initialize RAG application in session state
+    if 'rag_app' not in st.session_state:
+        st.session_state.rag_app = RAGPDFParser()
+        
+     # # File upload
+    pdf_file = st.file_uploader("Upload your PDF", type=['pdf'])
+    if pdf_file:
+        if st.button("Process PDF"):
+            with st.spinner("Processing PDF..."):
+                num_chunks = st.session_state.rag_app.process_pdf(pdf_file)
+            if num_chunks > 0:
+                st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
         
         #if st.button("Submit Question", type="primary"):
             #if question:
