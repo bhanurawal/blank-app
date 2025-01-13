@@ -141,5 +141,13 @@ def main():
             if num_chunks > 0:
                 st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
     
+    # Query input
+    query = st.text_input("Ask a question about your PDF:")
+    if query:
+        with st.spinner("Getting answer..."):
+            answer = st.session_state.rag_app.get_answer(query)
+            st.write("Answer:", answer)
+
+
 if __name__ == "__main__":
     main()
