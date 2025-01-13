@@ -88,7 +88,7 @@ def split_text(textPdf):
   """
   # Initialize text splitter with specified parameters
   text_splitter = RecursiveCharacterTextSplitter(
-     chunk_size=500, # Size of each chunk in characters
+     chunk_size=1000, # Size of each chunk in characters
      chunk_overlap=100, # Overlap between consecutive chunks
      length_function=len, # Function to compute the length of the text
      add_start_index=True, # Flag to add start index to each chunk
