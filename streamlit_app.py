@@ -5,6 +5,7 @@ from langchain.schema import Document
 import PyPDF2
 from langchain_community.document_loaders import PyPDFLoader
 import uuid
+import faiss
 from sentence_transformers import SentenceTransformer, util
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
