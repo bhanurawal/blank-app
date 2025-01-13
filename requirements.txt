@@ -7,3 +7,4 @@ langchain-community
 PyPDF2
 torch
 google-generativeai
+openai>=1.6.1
