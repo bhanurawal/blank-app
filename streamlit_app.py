@@ -14,19 +14,68 @@ def read_pdf_pypdf2(file):
         text += page.extract_text()
     return text
 
-def Initialize_Chunking_function(embed_model_par):
-  from llama_index.core.node_parser import (
-      SentenceSplitter,
-      SemanticSplitterNodeParser,
-  )
-  splitter = SemanticSplitterNodeParser(
-      buffer_size=1, breakpoint_percentile_threshold=95, embed_model=embed_model_par
-  )
-  # also baseline splitter
-  base_splitter = SentenceSplitter(chunk_size=512)
+class RAGPDFParser:
+    def __init__(self):
+        self.embeddings = OpenAIEmbeddings()
+        self.llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+        self.vector_store = None
+        self.persist_directory = "vector_store"
 
-  return splitter, base_splitter # Return the initialized objects
-    
+    def process_pdf(self, pdf_file):
+        """Process uploaded PDF file and create vector store"""
+        try:
+            # Create a unique temporary file name
+            temp_pdf_path = f"temp_{uuid.uuid4()}.pdf"
+            # Save uploaded file temporarily
+            with open(temp_pdf_path, "wb") as f:
+                f.write(pdf_file.getvalue())
+            
+            # Load and split the PDF
+            loader = PyPDFLoader(temp_pdf_path)
+            documents = loader.load()
+            
+            # Split text into chunks
+            text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=600,
+                chunk_overlap=100,
+                length_function=len
+            )
+            texts = text_splitter.split_documents(documents)
+            
+            # Create vector store
+            self.vector_store = FAISS.from_documents(
+                documents=texts,
+                embedding=self.embeddings
+            )
+            
+            # Clean up temporary file
+            os.remove(temp_pdf_path)
+            return len(texts)
+        except Exception as e:
+            st.error(f"Error processing PDF: {str(e)}")
+            return 0
+
+    def get_answer(self, query):
+        """Get answer for the query using RAG"""
+        try:
+            if not self.vector_store:
+                return "Please upload a PDF document first."
+            
+            # Create retrieval chain
+            qa_chain = RetrievalQA.from_chain_type(
+                llm=self.llm,
+                chain_type="stuff",
+                retriever=self.vector_store.as_retriever(
+                    search_kwargs={"k": 3}
+                )
+            )
+            
+            # Get answer
+            response = qa_chain.invoke({"query": query})
+            return response["result"]
+        except Exception as e:
+            return f"Error generating answer: {str(e)}"
+            
 def split_text(textPdf):
   """
   Split the text content of the given list of Document objects into smaller chunks.
@@ -51,15 +100,6 @@ def split_text(textPdf):
 
   return chunks # Return the list of split text chunks
     
-def generate_embedd(chunks):
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-    ## df = pd.DataFrame(columns=['text', 'embedding'])
-    
-    # Generate embeddings for the data
-    embeddings = model.encode(chunks, convert_to_tensor=True)
-    ## df = pd.concat([df, pd.DataFrame({'text': [text], 'embedding': [embedding]})], ignore_index=True)
-
-    return embeddings,model
 
 def main():
 
@@ -77,6 +117,10 @@ def main():
         chunks = split_text(read_pdf_pypdf2(uploaded_file))
             
         question = st.text_input("Ask a question about the file")
+        # Initialize RAG application in session state
+        if 'rag_app' not in st.session_state:
+            st.session_state.rag_app = RAGPDFParser()
+
         
         if st.button("Submit Question", type="primary"):
             if question:
@@ -88,7 +132,23 @@ def main():
                 splitter, base_splitter = Initialize_Chunking_function(model)
                 nodes = splitter.get_nodes_from_documents(binary_data)
                 st.write(nodes[1].get_content())
+
+                # # File upload
+                #     pdf_file = st.file_uploader("Upload your PDF", type=['pdf'])
+                #     if pdf_file:
+                #         if st.button("Process PDF"):
+                #             with st.spinner("Processing PDF..."):
+                #                 num_chunks = st.session_state.rag_app.process_pdf(pdf_file)
+                #                 if num_chunks > 0:
+                #                     st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
                 
+                #     # Query input
+                #     query = st.text_input("Ask a question about your PDF:")
+                #     if query:
+                #         with st.spinner("Getting answer..."):
+                #             answer = st.session_state.rag_app.get_answer(query)
+                #             st.write("Answer:", answer)
+
                 # Query Embeddings
                 #query_embedding = model.encode(question, convert_to_tensor=True)
                 
