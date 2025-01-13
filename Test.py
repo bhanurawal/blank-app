@@ -39,3 +39,31 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+  #if st.button("Submit Question", type="primary"):
+            #if question:
+                # Add your RAG model question-answering code here
+                #Create embedding for pdf 
+                #     # Query input
+                #     query = st.text_input("Ask a question about your PDF:")
+                #     if query:
+                #         with st.spinner("Getting answer..."):
+                #             answer = st.session_state.rag_app.get_answer(query)
+                #             st.write("Answer:", answer)
+
+                # Query Embeddings
+                #query_embedding = model.encode(question, convert_to_tensor=True)
+                
+                # Compute cosine similarities
+                #cosine_scores = util.pytorch_cos_sim(query_embedding, embeddings)[0]
+                
+                # Find the top 3 most similar sentences
+                #top_results = torch.topk(cosine_scores, k=3)
+                
+                # Print results
+                ### answer = "This is where the answer will be displayed."
+                #for score, idx in zip(top_results[0], top_results[1]):
+                    #print(f"Score: {score.item():.4f}\nText: {data[idx]}\n")
+                    #st.write(f"Score: {score.item():.4f}\nText: {chunks[idx]}\n")
