@@ -122,28 +122,20 @@ def main():
         # Initialize RAG application in session state
         if 'rag_app' not in st.session_state:
             st.session_state.rag_app = RAGPDFParser()
-
+            
+         # # File upload
+        pdf_file = st.file_uploader("Upload your PDF", type=['pdf'])
+        if pdf_file:
+            if st.button("Process PDF"):
+                with st.spinner("Processing PDF..."):
+                    num_chunks = st.session_state.rag_app.process_pdf(pdf_file)
+                    if num_chunks > 0:
+                        st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
         
         if st.button("Submit Question", type="primary"):
             if question:
                 # Add your RAG model question-answering code here
-                #Create embedding for pdf
-                embeddings , model = generate_embedd(chunks)
-                st.write(embeddings)
-                
-                splitter, base_splitter = Initialize_Chunking_function(model)
-                nodes = splitter.get_nodes_from_documents(binary_data)
-                st.write(nodes[1].get_content())
-
-                # # File upload
-                #     pdf_file = st.file_uploader("Upload your PDF", type=['pdf'])
-                #     if pdf_file:
-                #         if st.button("Process PDF"):
-                #             with st.spinner("Processing PDF..."):
-                #                 num_chunks = st.session_state.rag_app.process_pdf(pdf_file)
-                #                 if num_chunks > 0:
-                #                     st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
-                
+                #Create embedding for pdf 
                 #     # Query input
                 #     query = st.text_input("Ask a question about your PDF:")
                 #     if query:
