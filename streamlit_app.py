@@ -132,6 +132,8 @@ def main():
                 num_chunks = st.session_state.rag_app.process_pdf(pdf_file)
             if num_chunks > 0:
                 st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
-                
+
+    st.write("File uploaded successfully!")
+    
 if __name__ == "__main__":
     main()
