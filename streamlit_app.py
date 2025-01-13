@@ -132,8 +132,8 @@ def main():
                     if num_chunks > 0:
                         st.success(f"PDF processed successfully! Created {num_chunks} text chunks.")
         
-        if st.button("Submit Question", type="primary"):
-            if question:
+        #if st.button("Submit Question", type="primary"):
+            #if question:
                 # Add your RAG model question-answering code here
                 #Create embedding for pdf 
                 #     # Query input
