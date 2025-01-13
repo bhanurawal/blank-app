@@ -4,6 +4,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 import PyPDF2
 from sentence_transformers import SentenceTransformer, util
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
 import torch
 import os
 
@@ -18,7 +20,7 @@ def read_pdf_pypdf2(file):
 
 class RAGPDFParser:
     def __init__(self):
-        self.embeddings = OpenAIEmbeddings()
+        self.embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
         self.llm = ChatOpenAI(model_name="gpt-4", temperature=0,api_key=OPENAI_API_KEY)
         self.vector_store = None
         self.persist_directory = "vector_store"
