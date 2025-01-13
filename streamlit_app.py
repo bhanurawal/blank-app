@@ -7,6 +7,8 @@ from sentence_transformers import SentenceTransformer, util
 import torch
 import os
 
+OPENAI_API_KEY = os.getenv("API_KEY")
+
 def read_pdf_pypdf2(file):
     reader = PyPDF2.PdfReader(file)
     text = ""
@@ -16,8 +18,8 @@ def read_pdf_pypdf2(file):
 
 class RAGPDFParser:
     def __init__(self):
-        self.embeddings = OpenAIEmbeddings()
-        self.llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+        self.embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+        self.llm = ChatOpenAI(model_name="gpt-4", temperature=0,api_key=OPENAI_API_KEY)
         self.vector_store = None
         self.persist_directory = "vector_store"
 
